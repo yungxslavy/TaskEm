@@ -1,15 +1,9 @@
-//
-//  ContentView.swift
-//  TaskEm
-//
-//  Created by Tomislav Vuckovic on 6/2/24.
-//
-
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     var body: some View {
         VStack {
+            //WeekView()
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
@@ -20,5 +14,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
 }
