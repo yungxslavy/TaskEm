@@ -40,3 +40,24 @@ func isSameDay(a: Date, b: Date) -> Bool {
     let calendar = Calendar.current
     return calendar.isDate(a, inSameDayAs: b)
 }
+
+// Returns the Date of a specified number of weeks from the passed date
+func getDateByWeekChange(weeks: Int, date: Date) -> Date? {
+    let calendar = Calendar.current
+    if let newDate = calendar.date(byAdding: .weekOfYear, value: weeks, to: date) {
+        return newDate
+    }
+    else {
+        return nil
+    }
+}
+
+// Returns a date from given year month and day
+func getSpecifiedDate(year: Int, month: Int, day: Int) -> Date? {
+    var dateComponents = DateComponents()
+    dateComponents.year = year
+    dateComponents.month = month
+    dateComponents.day = day
+    
+    return Calendar.current.date(from: dateComponents)
+}
