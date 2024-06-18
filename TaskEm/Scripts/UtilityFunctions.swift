@@ -52,6 +52,16 @@ func getDateByWeekChange(weeks: Int, date: Date) -> Date? {
     }
 }
 
+func getDateByDayChange(days: Int, date: Date) -> Date? {
+    let calendar = Calendar.current
+    if let newDate = calendar.date(byAdding: .day, value: days, to: date) {
+        return newDate
+    }
+    else {
+        return nil
+    }
+}
+
 // Returns a date from given year month and day
 func getSpecifiedDate(year: Int, month: Int, day: Int) -> Date? {
     var dateComponents = DateComponents()
@@ -60,4 +70,26 @@ func getSpecifiedDate(year: Int, month: Int, day: Int) -> Date? {
     dateComponents.day = day
     
     return Calendar.current.date(from: dateComponents)
+}
+
+// Returns the index of the weekday from date where 0 = Sun and 6 = Sat
+func getWeekDay(date: Date) -> Int {
+    let calendar = Calendar.current
+    let components = calendar.component(.weekday, from: date)
+    return components - 1
+}
+
+// Returns the days ahead/behind yDate is to xDate as Int. 0 = sameday | 1
+func getDifferenceInWeekDay(xDate: Date, yDate: Date) -> Int {
+    let xDateWeekday = getWeekDay(date: xDate)
+    let yDateWeekday = getWeekDay(date: yDate)
+    
+    return yDateWeekday - xDateWeekday
+}
+
+// Returns MMMM and YYYY of the date as string
+func formattedDate(date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "MMMM, yyyy"
+    return dateFormatter.string(from: date)
 }

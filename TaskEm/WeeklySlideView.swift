@@ -9,7 +9,6 @@ struct WeekDayButton: View {
     var color: Color {
         isSelected ? Color.red : Color.primary
     }
-    
     var body: some View {
         Button(action: {
             selectedDate = date
@@ -29,76 +28,91 @@ struct WeekDayButton: View {
 
 // View for the week
 struct WeeklySlideView: View {
-    @State var selectedDate: Date
-    @State private var selectedTab = 1
+    // Bindings and States
+    @Binding var selectedDate: Date
+    @State private var selectedTab = 5
     @State private var isTransitioning = false
-
-    var currentWeekDates: [Date] { getDatesInWeek(for: selectedDate) ?? [] }
-    var nextWeekDates: [Date] { getDatesInWeek(for: getDateByWeekChange(weeks: 1, date: selectedDate)!) ?? [] }
-    var lastWeekDates: [Date] { getDatesInWeek(for: getDateByWeekChange(weeks: -1, date: selectedDate)!) ?? [] }
+    @State private var baseDate: Date
     
+    // Need this to match the baseDate to selectedDate so the calendar doesnt go crazy
+    init(selectedDate: Binding<Date>) {
+        self._selectedDate = selectedDate
+        self._baseDate = State(initialValue: selectedDate.wrappedValue)
+    }
+
+    // Week related values
+    var totalNumofWeeks = 10 // Ensure this is even
+    var weeksRange: Range<Int> { 0..<totalNumofWeeks + 1 }
+    @State private var isResetting = false
+    
+    // Function returns array of dates to fill out the weekly view dynamically
+    func getWeekDates(for index: Int) -> [Date] {
+        let weeksFromCurrent = index - (totalNumofWeeks / 2)
+        return getDatesInWeek(for: getDateByWeekChange(weeks: weeksFromCurrent, date: baseDate)!) ?? []
+    }
+    
+    // Main
     var body: some View {
         TabView(selection: $selectedTab) {
-            HStack(alignment: .center) {
-                ForEach(lastWeekDates.indices, id: \.self) { index in
-                    let date = lastWeekDates[index]
-                    let isSelected = isSameDay(a: date, b: selectedDate)
-                    WeekDayButton(selectedDate: $selectedDate, date: date, isSelected: isSelected)
-                    if index < lastWeekDates.count - 1 {
-                        Spacer()
+            ForEach(weeksRange, id: \.self) { index in
+                HStack(alignment: .center) {
+                    ForEach(getWeekDates(for: index).indices, id: \.self) { dayIndex in
+                        let date = getWeekDates(for: index)[dayIndex]
+                        let isSelected = isSameDay(a: date, b: selectedDate)
+                        WeekDayButton(selectedDate: $selectedDate, date: date, isSelected: isSelected)
+                        if dayIndex < getWeekDates(for: index).count - 1 {
+                            Spacer()
+                        }
                     }
                 }
+                .padding()
+                .tag(index)
             }
-            .padding()
-            .tag(0)
-            
-            HStack(alignment: .center) {
-                ForEach(currentWeekDates.indices, id: \.self) { index in
-                    let date = currentWeekDates[index]
-                    let isSelected = isSameDay(a: date, b: selectedDate)
-                    WeekDayButton(selectedDate: $selectedDate, date: date, isSelected: isSelected)
-                    if index < currentWeekDates.count - 1 {
-                        Spacer()
-                    }
-                }
-            }
-            .padding()
-            .tag(1)
-            
-            HStack(alignment: .center) {
-                ForEach(nextWeekDates.indices, id: \.self) { index in
-                    let date = nextWeekDates[index]
-                    let isSelected = isSameDay(a: date, b: selectedDate)
-                    WeekDayButton(selectedDate: $selectedDate, date: date, isSelected: isSelected)
-                    if index < nextWeekDates.count - 1 {
-                        Spacer()
-                    }
-                }
-            }
-            .padding()
-            .tag(2)
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Removes the page dots
         .onChange(of: selectedTab) {
+            // Check if the tab is currently resetting
+            if(isResetting){
+                isResetting = false
+                return
+            }
+            
+            // Add a thread to the queue to activate after .5 secs
             isTransitioning = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                // Our debounce check
                 if isTransitioning {
-                    if selectedTab == 2 {
-                        selectedDate = getDateByWeekChange(weeks: 1, date: selectedDate)!
-                    } else if selectedTab == 0 {
-                        selectedDate = getDateByWeekChange(weeks: -1, date: selectedDate)!
+                    // Get the difference in days for the selectedDate
+                    let diff = getDifferenceInWeekDay(xDate: baseDate, yDate: selectedDate)
+                    
+                    // Change the week to the respective tab and add the days to match the correct day
+                    selectedDate = getDateByWeekChange(weeks: selectedTab - (totalNumofWeeks / 2), date: baseDate)!
+                    selectedDate = getDateByDayChange(days: diff, date: selectedDate)!
+                    
+                    // When reaching the boundary we reset the tabs
+                    if selectedTab >= weeksRange.upperBound - 2 || selectedTab <= weeksRange.lowerBound + 1 {
+                        // Set the dates to equal each other again
+                        baseDate = selectedDate
+                        selectedTab = totalNumofWeeks / 2
+                        isResetting = true
                     }
-                    selectedTab = 1
-                    isTransitioning = false
                 }
+                // Set this back to false to allow the logic to run again
+                isTransitioning = false
             }
         }
-//        .background(Color.green)
+    }
+}
+
+struct sampleView: View {
+    @State var selectedDate = Date()
+    var body: some View {
+        WeeklySlideView(selectedDate: $selectedDate)
     }
 }
 
 struct WeeklySlide_Previews: PreviewProvider {
     static var previews: some View {
-        WeeklySlideView(selectedDate: getSpecifiedDate(year: 2024, month: 6, day: 14)!)
+        sampleView()
     }
 }

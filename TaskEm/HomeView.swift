@@ -1,21 +1,29 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State var selectedDate: Date
+    
     var body: some View {
-        VStack {
-//            ToolbarItem
-            WeeklySlideView(selectedDate: Date())
-                .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-            Spacer()
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                HStack{
+                    Text("\(formattedDate(date: selectedDate))")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Spacer()
+                    Image(systemName: "star.fill")
+                }
+                .padding(5)
+                WeeklySlideView(selectedDate: $selectedDate)
+                    .frame(height: 100)
+                Spacer()
+
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
 #Preview {
-    HomeView()
+    HomeView(selectedDate: Date())
 }

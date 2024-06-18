@@ -11,7 +11,7 @@ import SwiftUI
 struct TaskEmApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(selectedDate: Date())
         }
     }
 }
