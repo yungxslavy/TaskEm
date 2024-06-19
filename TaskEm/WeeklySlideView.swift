@@ -30,15 +30,9 @@ struct WeekDayButton: View {
 struct WeeklySlideView: View {
     // Bindings and States
     @Binding var selectedDate: Date
+    @Binding var baseDate: Date
     @State private var selectedTab = 5
     @State private var isTransitioning = false
-    @State private var baseDate: Date
-    
-    // Need this to match the baseDate to selectedDate so the calendar doesnt go crazy
-    init(selectedDate: Binding<Date>) {
-        self._selectedDate = selectedDate
-        self._baseDate = State(initialValue: selectedDate.wrappedValue)
-    }
 
     // Week related values
     var totalNumofWeeks = 10 // Ensure this is even
@@ -70,6 +64,13 @@ struct WeeklySlideView: View {
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Removes the page dots
+        .onChange(of: baseDate){
+            // In case the tab is already on 5 we still send input
+            if selectedTab == 5 {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }
+            selectedTab = totalNumofWeeks / 2
+        }
         .onChange(of: selectedTab) {
             // Check if the tab is currently resetting
             if(isResetting){
@@ -89,6 +90,9 @@ struct WeeklySlideView: View {
                     selectedDate = getDateByWeekChange(weeks: selectedTab - (totalNumofWeeks / 2), date: baseDate)!
                     selectedDate = getDateByDayChange(days: diff, date: selectedDate)!
                     
+                    // Send feedback to user
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    
                     // When reaching the boundary we reset the tabs
                     if selectedTab >= weeksRange.upperBound - 2 || selectedTab <= weeksRange.lowerBound + 1 {
                         // Set the dates to equal each other again
@@ -106,8 +110,9 @@ struct WeeklySlideView: View {
 
 struct sampleView: View {
     @State var selectedDate = Date()
+    @State var baseDate = Date()
     var body: some View {
-        WeeklySlideView(selectedDate: $selectedDate)
+        WeeklySlideView(selectedDate: $selectedDate, baseDate: $baseDate)
     }
 }
 

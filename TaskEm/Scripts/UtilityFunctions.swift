@@ -93,3 +93,9 @@ func formattedDate(date: Date) -> String {
     dateFormatter.dateFormat = "MMMM, yyyy"
     return dateFormatter.string(from: date)
 }
+
+class ReloadViewHelper: ObservableObject {
+    func reloadView() {
+        objectWillChange.send()
+    }
+}
