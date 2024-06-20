@@ -18,8 +18,11 @@ struct HomeView: View {
                 .padding(5)
                 WeeklySlideView(selectedDate: $selectedDate, baseDate: $baseDate)
                     .frame(height: 100)
+                ScrollView {
+                    TaskView()
+                }
+                .scrollIndicators(.hidden)
                 Spacer()
-
             }
             .padding()
         }
