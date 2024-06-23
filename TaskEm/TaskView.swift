@@ -12,12 +12,17 @@ struct TaskCard: View {
             // Task Name
             Text(taskData.name)
                 .font(.headline)
+                .strikethrough(taskData.isComplete)
             // Spacer
             Spacer()
             // Due Date Time
-            Text("\(taskData.dueDate.formatted(date: .omitted, time: .shortened))")
-                .font(.subheadline)
+            if(taskData.dueDate != nil){
+                Text("\(taskData.dueDate!.formatted(date: .omitted, time: .shortened))")
+                    .font(.subheadline)
+                    .strikethrough(taskData.isComplete)
+            }
             Image(systemName: taskData.isComplete ? "checkmark.square" : "square")
+                .imageScale(.large)
                 .foregroundStyle(taskData.iconColor)
                 .onTapGesture {
                     taskData.isComplete.toggle()

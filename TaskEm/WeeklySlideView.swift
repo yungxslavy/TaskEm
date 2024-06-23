@@ -59,7 +59,7 @@ struct WeeklySlideView: View {
                         }
                     }
                 }
-                .padding()
+                .padding(10)
                 .tag(index)
             }
         }
