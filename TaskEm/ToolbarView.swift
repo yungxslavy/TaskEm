@@ -15,6 +15,7 @@ struct ToolbarView: View {
             }) {
                 Image(systemName: "calendar")
                     .foregroundStyle(Color.primary)
+                    .imageScale(.large)
             }
             .popover(isPresented: $showDatePicker) {
                 VStack {
@@ -40,11 +41,11 @@ struct ToolbarView: View {
                 
             }
             
-            Button(action: {
-                // Action for gear button
-            }) {
-                Image(systemName: "gear")
-                    .foregroundStyle(Color.primary)
+            // Settings view
+            NavigationLink(destination: SettingsPageView()) {
+                    Image(systemName: "gear")
+                        .foregroundStyle(Color.primary)
+                        .imageScale(.large)
             }
             
             Button(action: {
@@ -52,6 +53,7 @@ struct ToolbarView: View {
             }) {
                 Image(systemName: "line.3.horizontal.decrease")
                     .foregroundStyle(Color.primary)
+                    .imageScale(.large)
             }
             
             Button(action: {
@@ -59,6 +61,7 @@ struct ToolbarView: View {
             }) {
                 Image(systemName: "plus")
                     .foregroundStyle(Color.primary)
+                    .imageScale(.large)
             }
         }
     }

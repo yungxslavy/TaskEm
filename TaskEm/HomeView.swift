@@ -5,28 +5,31 @@ struct HomeView: View {
     @State var baseDate: Date
     
     var body: some View {
-        VStack {
-            HStack{
-                Text("\(formattedDate(date: selectedDate))")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .onTapGesture { selectedDate = Date(); baseDate = Date()}
+        NavigationStack{
+            VStack {
+                // HUD Bar
+                HStack{
+                    Text("\(formattedDate(date: selectedDate))")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .onTapGesture { selectedDate = Date(); baseDate = Date()}
+                    Spacer()
+                    ToolbarView(selectedDate: $selectedDate, baseDate: $baseDate)
+                }
+                
+                // Weekly View Slider
+                WeeklySlideView(selectedDate: $selectedDate, baseDate: $baseDate)
+                    .frame(height: 80)
+                
+                // Task View
+                ScrollView {
+                    TaskView()
+                }
+                .scrollIndicators(.hidden)
                 Spacer()
-                ToolbarView(selectedDate: $selectedDate, baseDate: $baseDate)
             }
-            
-            // Weekly View Slider
-            WeeklySlideView(selectedDate: $selectedDate, baseDate: $baseDate)
-                .frame(height: 100)
-            
-            // Task View
-            ScrollView {
-                TaskView()
-            }
-            .scrollIndicators(.hidden)
-            Spacer()
+            .padding()
         }
-        .padding()
     }
 }
 
