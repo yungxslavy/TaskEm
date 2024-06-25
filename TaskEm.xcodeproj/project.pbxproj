@@ -20,6 +20,7 @@
 		788031092C23799000D5C20E /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788031082C23799000D5C20E /* TaskView.swift */; };
 		7880310B2C274D1300D5C20E /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880310A2C274D1300D5C20E /* ToolbarView.swift */; };
 		7880310D2C28F3BD00D5C20E /* SettingsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */; };
+		788031132C2B77DD00D5C20E /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788031122C2B77DD00D5C20E /* AddTaskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		788031082C23799000D5C20E /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		7880310A2C274D1300D5C20E /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageView.swift; sourceTree = "<group>"; };
+		788031122C2B77DD00D5C20E /* AddTaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		788030AD2C0D5CD300D5C20E /* TaskEm */ = {
 			isa = PBXGroup;
 			children = (
+				788031122C2B77DD00D5C20E /* AddTaskView.swift */,
 				788030FD2C1AB58500D5C20E /* Scripts */,
 				788030DA2C0D70A200D5C20E /* Models */,
 				788030AE2C0D5CD300D5C20E /* TaskEmApp.swift */,
@@ -294,6 +297,7 @@
 				788030B12C0D5CD300D5C20E /* HomeView.swift in Sources */,
 				788030AF2C0D5CD300D5C20E /* TaskEmApp.swift in Sources */,
 				7880310D2C28F3BD00D5C20E /* SettingsPageView.swift in Sources */,
+				788031132C2B77DD00D5C20E /* AddTaskView.swift in Sources */,
 				788031072C2371C900D5C20E /* TaskModel.swift in Sources */,
 				788031092C23799000D5C20E /* TaskView.swift in Sources */,
 				788030FF2C1AB59E00D5C20E /* UtilityFunctions.swift in Sources */,

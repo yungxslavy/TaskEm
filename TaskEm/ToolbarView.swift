@@ -56,9 +56,7 @@ struct ToolbarView: View {
                     .imageScale(.large)
             }
             
-            Button(action: {
-                // Action for plus button
-            }) {
+            NavigationLink(destination: AddTaskView()) {
                 Image(systemName: "plus")
                     .foregroundStyle(Color.primary)
                     .imageScale(.large)
