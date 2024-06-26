@@ -21,6 +21,8 @@
 		7880310B2C274D1300D5C20E /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880310A2C274D1300D5C20E /* ToolbarView.swift */; };
 		7880310D2C28F3BD00D5C20E /* SettingsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */; };
 		788031132C2B77DD00D5C20E /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788031122C2B77DD00D5C20E /* AddTaskView.swift */; };
+		788031152C2BA97D00D5C20E /* IconListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788031142C2BA97D00D5C20E /* IconListModel.swift */; };
+		788031172C2BAB9100D5C20E /* IconSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788031162C2BAB9100D5C20E /* IconSelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		7880310A2C274D1300D5C20E /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageView.swift; sourceTree = "<group>"; };
 		788031122C2B77DD00D5C20E /* AddTaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		788031142C2BA97D00D5C20E /* IconListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IconListModel.swift; path = TaskEm/IconListModel.swift; sourceTree = SOURCE_ROOT; };
+		788031162C2BAB9100D5C20E /* IconSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,7 @@
 				788031082C23799000D5C20E /* TaskView.swift */,
 				7880310A2C274D1300D5C20E /* ToolbarView.swift */,
 				7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */,
+				788031162C2BAB9100D5C20E /* IconSelectionView.swift */,
 			);
 			path = TaskEm;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				788031062C2371C800D5C20E /* TaskModel.swift */,
+				788031142C2BA97D00D5C20E /* IconListModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -302,7 +308,9 @@
 				788031092C23799000D5C20E /* TaskView.swift in Sources */,
 				788030FF2C1AB59E00D5C20E /* UtilityFunctions.swift in Sources */,
 				788030FC2C12B9B200D5C20E /* WeeklySlideView.swift in Sources */,
+				788031152C2BA97D00D5C20E /* IconListModel.swift in Sources */,
 				7880310B2C274D1300D5C20E /* ToolbarView.swift in Sources */,
+				788031172C2BAB9100D5C20E /* IconSelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
