@@ -21,6 +21,9 @@ struct AddTaskView: View {
                             .background(Color.blue)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
+                    .popover(isPresented: $showIconPicker){
+                        IconPickerView(selectedIcon: $selectedIconName)
+                    }
                 }
                 .padding(.bottom, 15)
                 
@@ -35,13 +38,13 @@ struct AddTaskView: View {
                 }
                 
                 TextField("Enter title", text: $title)
-                    .padding(.leading, 10)
+                    .padding(.leading, 4)
                     .padding(.bottom, 8)
                     .overlay(
                         Rectangle()
                             .frame(height: 1)
                             .foregroundColor(Color.primary)
-                            .padding(.leading, 10),
+                            .padding(.leading, 4),
                         alignment: .bottom
                     )
                     .padding(.bottom, 15)
