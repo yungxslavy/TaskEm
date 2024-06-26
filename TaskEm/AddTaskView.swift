@@ -1,38 +1,73 @@
-
 import SwiftUI
 
 struct AddTaskView: View {
     @State private var title: String = ""
     @State private var details: String = ""
-    
-    let genders = ["Male", "Female"]
+    @FocusState private var textfieldFocused: Bool
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 20) {
+            // Title
             HStack {
-                Text("New Task")
-                    .font(.title)
+                Image(systemName: "pencil")
+                    .foregroundColor(.blue)
+                Text("Title:")
+                    .font(.title2)
                     .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 10)
+                Spacer()
             }
-            Text("Title")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            TextField("Enter title", text: $title).underline()
-            Spacer()
+            
+            TextField("Enter title", text: $title)
+                .padding(.leading, 10)
+                .padding(.bottom, 8)
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(Color.primary)
+                        .padding(.leading, 10),
+                    alignment: .bottom
+                )
+                .padding(.bottom, 15)
+            
+            // Details
+            HStack {
+                Image(systemName: "text.alignleft")
+                    .foregroundColor(.blue)
+                Text("Details:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            TextEditor(text: $details)
+                .padding()
+                .border(Color.gray, width: 1)
+                .frame(height: 200)
+            
+            Button(action: submitForm) {
+                Text("Submit")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
         }
         .padding()
-        
+        .navigationTitle("Create Task")
     }
     
     func submitForm() {
         // Handle form submission
-        print("Form submitted")
+        print("Form submitted with title: \(title) and details: \(details)")
     }
 }
 
-
-#Preview(){
-    AddTaskView()
+struct AddTaskView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            AddTaskView()
+        }
+    }
 }
