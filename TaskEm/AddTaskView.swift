@@ -11,25 +11,6 @@ struct AddTaskView: View {
         VStack(alignment: .leading, spacing: 20) {
             ScrollView {
                 
-                // Icon
-                HStack {
-                    Button(action: {
-                        showIconPicker.toggle()
-                    }){
-                        Image(systemName: selectedIconName)
-                            .imageScale(.large)
-                            .padding(10)
-                            .frame(width: 60, height: 60)
-                            .foregroundStyle(iconColor)
-                            .background(.ultraThinMaterial, in:RoundedRectangle(cornerRadius: 10.0))
-                            
-                    }
-                    .popover(isPresented: $showIconPicker){
-                        IconPickerView(selectedIcon: $selectedIconName, iconColor: $iconColor)
-                    }
-                }
-                .padding(.bottom, 15)
-                
                 // Title
                 HStack {
                     Image(systemName: "pencil")
@@ -40,17 +21,35 @@ struct AddTaskView: View {
                     Spacer()
                 }
                 
-                TextField("Enter title", text: $title)
-                    .padding(.leading, 4)
-                    .padding(.bottom, 8)
-                    .overlay(
-                        Rectangle()
-                            .frame(height: 1)
-                            .foregroundColor(Color.primary)
-                            .padding(.leading, 4),
-                        alignment: .bottom
-                    )
+                // Title Input
+                HStack {
+                    TextField("Enter title", text: $title)
+                        .padding(.leading, 4)
+                        .padding(.bottom, 8)
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(Color.primary)
+                                .padding(.leading, 4),
+                            alignment: .bottom
+                        )
                     .padding(.bottom, 15)
+                    
+                    // Icon Selection Button
+                    Button(action: {
+                        showIconPicker.toggle()
+                    }){
+                        Image(systemName: selectedIconName)
+                            .frame(width: 45, height: 45)
+                            .foregroundStyle(iconColor)
+                            .background(.ultraThinMaterial, in:RoundedRectangle(cornerRadius: 10.0))
+                            
+                    }
+                    .padding(.bottom, 15)
+                    .popover(isPresented: $showIconPicker){
+                        IconPickerView(selectedIcon: $selectedIconName, iconColor: $iconColor)
+                    }
+                }
                 
                 // Details
                 HStack {
