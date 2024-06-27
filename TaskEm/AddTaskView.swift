@@ -5,6 +5,7 @@ struct AddTaskView: View {
     @State private var notes: String = ""
     @State private var showIconPicker = false
     @State private var selectedIconName = "lightbulb.max.fill"
+    @State private var iconColor = Color.red
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -16,13 +17,15 @@ struct AddTaskView: View {
                         showIconPicker.toggle()
                     }){
                         Image(systemName: selectedIconName)
+                            .imageScale(.large)
                             .padding(10)
-                            .foregroundStyle(Color.white)
-                            .background(Color.blue)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .frame(width: 60, height: 60)
+                            .foregroundStyle(iconColor)
+                            .background(.ultraThinMaterial, in:RoundedRectangle(cornerRadius: 10.0))
+                            
                     }
                     .popover(isPresented: $showIconPicker){
-                        IconPickerView(selectedIcon: $selectedIconName)
+                        IconPickerView(selectedIcon: $selectedIconName, iconColor: $iconColor)
                     }
                 }
                 .padding(.bottom, 15)
