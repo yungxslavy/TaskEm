@@ -6,6 +6,8 @@ struct AddTaskView: View {
     @State private var showIconPicker = false
     @State private var selectedIconName = "lightbulb.max.fill"
     @State private var iconColor = Color.red
+    @State private var dueDate = Date()
+    @State private var isTime = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -51,6 +53,36 @@ struct AddTaskView: View {
                     }
                 }
                 
+                // Due Date
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.blue)
+                    Text("Date:")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                
+                // Due Date Selection
+                VStack {
+                    // Date
+                    DatePicker(
+                        "Select due date",
+                        selection: $dueDate,
+                        displayedComponents: [.date]
+                    )
+                    .datePickerStyle(WheelDatePickerStyle())
+                    .labelsHidden()
+                    
+                    // Time
+                    DatePicker(
+                        "Set a time",
+                        selection: $dueDate,
+                        displayedComponents: [.hourAndMinute]
+                    )
+                    .labelsHidden()
+                }
+                
                 // Details
                 HStack {
                     Image(systemName: "text.alignleft")
@@ -83,6 +115,7 @@ struct AddTaskView: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
             
             Spacer()
             
@@ -105,7 +138,7 @@ struct AddTaskView: View {
     
     func submitForm() {
         // Handle form submission
-        print("Form submitted with title: \(title) and details: \(notes)")
+        print("Date: \(dueDate)")
     }
 }
 
