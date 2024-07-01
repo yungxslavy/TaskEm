@@ -4,8 +4,8 @@ struct AddTaskView: View {
     @State private var title: String = ""
     @State private var notes: String = ""
     @State private var showIconPicker = false
-    @State private var selectedIconName = "lightbulb.max.fill"
-    @State private var iconColor = Color.red
+    @State private var selectedIconName = "star"
+    @State private var iconColor = Color.blue
     @State private var dueDate = Date()
     @State private var isTime = false
     
@@ -13,18 +13,18 @@ struct AddTaskView: View {
         VStack(alignment: .leading, spacing: 20) {
             ScrollView {
                 TaskTitleSection(title: $title, showIconPicker: $showIconPicker, selectedIconName: $selectedIconName, iconColor: $iconColor)
-                DueDateSection(dueDate: $dueDate, isTime: $isTime)
+                DueDateSection(dueDate: $dueDate, isTime: $isTime, iconColor: iconColor)
                 ColorSection(iconColor: $iconColor)
-                NotesSection(notes: $notes)
+                NotesSection(notes: $notes, iconColor: iconColor)
+                    .onTapGesture {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
             }
             .scrollIndicators(.hidden)
             
             Spacer()
             
             SubmitButton(action: submitForm)
-        }
-        .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .padding()
         .navigationTitle("Create Task")
@@ -46,7 +46,7 @@ struct TaskTitleSection: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "pencil")
-                    .foregroundColor(.blue)
+                    .foregroundColor(iconColor)
                 Text("Title:")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -86,12 +86,13 @@ struct TaskTitleSection: View {
 struct DueDateSection: View {
     @Binding var dueDate: Date
     @Binding var isTime: Bool
+    var iconColor: Color
     
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
             HStack {
                 Image(systemName: "calendar")
-                    .foregroundColor(.blue)
+                    .foregroundColor(iconColor)
                 Text("Date:")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -99,7 +100,7 @@ struct DueDateSection: View {
                 Spacer()
                 
                 Image(systemName: "clock")
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(iconColor)
                 Text("Time")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -138,23 +139,25 @@ struct ColorSection: View {
     var body: some View {
         HStack {
             Image(systemName: "paintpalette")
-                .foregroundColor(.blue)
+                .foregroundColor(iconColor)
             Text("Color:")
                 .font(.title2)
                 .fontWeight(.bold)
             Spacer()
+            ColorPicker("", selection: $iconColor)
         }
     }
 }
 
 struct NotesSection: View {
     @Binding var notes: String
+    var iconColor: Color
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "text.alignleft")
-                    .foregroundColor(.blue)
+                    .foregroundColor(iconColor)
                 Text("Notes:")
                     .font(.title2)
                     .fontWeight(.bold)
