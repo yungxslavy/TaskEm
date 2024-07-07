@@ -135,16 +135,56 @@ struct DueDateSection: View {
 
 struct ColorSection: View {
     @Binding var iconColor: Color
+    // Define colors for the circles
+    let colors: [Color] = [.blue, .red, .green, .yellow]
+    
+    // State variable to track the selected color index
+    @State private var selectedColorIndex = 0
     
     var body: some View {
-        HStack {
-            Image(systemName: "paintpalette")
-                .foregroundColor(iconColor)
-            Text("Color:")
-                .font(.title2)
-                .fontWeight(.bold)
-            Spacer()
-            ColorPicker("", selection: $iconColor)
+        VStack {
+            HStack {
+                Image(systemName: "paintpalette")
+                    .foregroundColor(iconColor)
+                Text("Color:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            HStack {
+                ForEach (0..<4) { index in
+                    Circle()
+                        .overlay(
+                            Group {
+                                if index == selectedColorIndex {
+                                    Circle()
+                                        .stroke(.black, lineWidth: 2)
+                                        .frame(width: 22)
+                                }
+                            }
+                        )
+                        .frame(width: 30)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 10)
+                        .foregroundStyle(index < colors.count ? colors[index] : Color.white)
+                        .onTapGesture {
+                            selectedColorIndex = index
+                            iconColor = colors[selectedColorIndex]
+                        }
+                }
+                
+                ColorPicker("", selection: $iconColor)
+                    .labelsHidden() // Hides the label of the color picker
+                    .frame(width: 35, height: 35) // Match the circle size
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 10)
+                    .clipShape(Circle()) // Make the color picker circular
+                    
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
 }
