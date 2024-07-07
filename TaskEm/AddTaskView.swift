@@ -180,7 +180,13 @@ struct ColorSection: View {
                     .padding(.horizontal, 10)
                     .padding(.vertical, 10)
                     .clipShape(Circle()) // Make the color picker circular
-                    
+                    .onChange(of: iconColor){
+                        if let index = colors.firstIndex(of: iconColor) {
+                            selectedColorIndex = index
+                        } else {
+                            selectedColorIndex = 5
+                        }
+                    }
             }
             .frame(maxWidth: .infinity)
             .background(Color.clear)
