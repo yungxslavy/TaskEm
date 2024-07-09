@@ -24,7 +24,7 @@ struct AddTaskView: View {
             
             Spacer()
             
-            SubmitButton(action: submitForm)
+            SubmitButton(action: submitForm, iconColor: iconColor)
         }
         .padding()
         .navigationTitle("Create Task")
@@ -86,9 +86,12 @@ struct TaskTitleSection: View {
 struct DueDateSection: View {
     @Binding var dueDate: Date
     @Binding var isTime: Bool
+    @State var selectDate = false
+    @State var showCalendar = false
     var iconColor: Color
     
     var body: some View {
+        // Label section
         VStack(alignment: .center, spacing: 10) {
             HStack {
                 Image(systemName: "calendar")
@@ -105,32 +108,66 @@ struct DueDateSection: View {
                     .font(.title2)
                     .fontWeight(.bold)
                 Toggle(isOn: $isTime) {}
-                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    .toggleStyle(SwitchToggleStyle(tint: iconColor))
                     .scaleEffect(0.8)
                     .frame(width: 35)
                     .padding(.trailing, 15)
             }
             
+            // Date Display and calendar callup
             VStack {
-                DatePicker(
-                    "Select due date",
-                    selection: $dueDate,
-                    displayedComponents: [.date]
-                )
-                .datePickerStyle(WheelDatePickerStyle())
-                .labelsHidden()
+                Button(action: {showCalendar.toggle()}){
+                    Text("\(dueDateFormatter(date: dueDate))")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .padding(15)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                        .foregroundStyle(Color.primary)
+                        .popover(isPresented: $showCalendar) {
+                            VStack {
+                                DatePicker(
+                                    "Select due date",
+                                    selection: $dueDate,
+                                    displayedComponents: [.date]
+                                )
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                                .tint(iconColor)
+                                .labelsHidden()
+                                
+                                Button(action: {
+                                    showCalendar = false
+                                }){
+                                    Text("Done")
+                                        .foregroundStyle(Color.white)
+                                        .font(.title)
+                                }
+                                .padding(10)
+                                .background(iconColor)
+                                .cornerRadius(10)
+                            }
+                        }
+                }
                 
-                if isTime {
+                // Time selection display
+                if(isTime) {
                     DatePicker(
                         "Set a time",
                         selection: $dueDate,
                         displayedComponents: [.hourAndMinute]
                     )
+                    .tint(iconColor)
                     .labelsHidden()
                 }
             }
         }
     }
+    
+    // Correct date formatter for the display
+    func dueDateFormatter(date: Date) -> String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE, MMM d" // This will format the date as "Monday, Jan 1"
+            return formatter.string(from: date)
+        }
 }
 
 struct ColorSection: View {
@@ -169,8 +206,10 @@ struct ColorSection: View {
                         .padding(.vertical, 10)
                         .foregroundStyle(index < colors.count ? colors[index] : Color.white)
                         .onTapGesture {
-                            selectedColorIndex = index
-                            iconColor = colors[selectedColorIndex]
+                            withAnimation {
+                                selectedColorIndex = index
+                                iconColor = colors[selectedColorIndex]
+                            }
                         }
                 }
                 
@@ -236,6 +275,7 @@ struct NotesSection: View {
 
 struct SubmitButton: View {
     let action: () -> Void
+    let iconColor: Color
     
     var body: some View {
         Button(action: action) {
@@ -243,7 +283,7 @@ struct SubmitButton: View {
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, minHeight: 44)
-                .background(Color.blue)
+                .background(iconColor)
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
