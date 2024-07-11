@@ -8,6 +8,7 @@ struct AddTaskView: View {
     @State private var iconColor = Color.blue
     @State private var dueDate = Date()
     @State private var isTime = false
+    @State private var repeatOption: Int = 0
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -15,6 +16,7 @@ struct AddTaskView: View {
                 TaskTitleSection(title: $title, showIconPicker: $showIconPicker, selectedIconName: $selectedIconName, iconColor: $iconColor)
                 DueDateSection(dueDate: $dueDate, isTime: $isTime, iconColor: iconColor)
                 ColorSection(iconColor: $iconColor)
+                RepeatSection(repeatOption: $repeatOption, iconColor: iconColor)
                 NotesSection(notes: $notes, iconColor: iconColor)
                     .onTapGesture {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -32,8 +34,18 @@ struct AddTaskView: View {
     
     func submitForm() {
         // Handle form submission
-        print("Date: \(dueDate)")
+        print("*********************")
+        print("Title: \(title)")
+        print("Notes: \(notes)")
+        print("ShowIconPicker: \(showIconPicker)")
+        print("SelectediconName: \(selectedIconName)")
+        print("IconColor: \(iconColor)")
+        print("DueDate: \(dueDate)")
+        print("isTime: \(isTime)")
+        print("repeatOption: \(repeatOption)")
     }
+    
+    
 }
 
 struct TaskTitleSection: View {
@@ -230,6 +242,45 @@ struct ColorSection: View {
             .frame(maxWidth: .infinity)
             .background(Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+}
+
+struct RepeatSection: View {
+    @Binding var repeatOption: Int
+    var iconColor: Color
+    let selectionsText = ["None", "Daily", "Weekly"]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "text.alignleft")
+                    .foregroundColor(iconColor)
+                Text("Repeat:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            HStack {
+                HStack{
+                    ForEach(0..<3){ index in
+                        Button(action: {
+                            withAnimation{
+                                repeatOption = index
+                            }
+                        }){
+                            Text(selectionsText[index])
+                                .foregroundStyle(Color.primary)
+                                .font(.title3)
+                        }
+                        .padding()
+                        .background(repeatOption == index ? iconColor : Color.clear, in: RoundedRectangle(cornerRadius: 10.0))
+                    }
+                }
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, 10)
         }
     }
 }
