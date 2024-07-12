@@ -1,4 +1,26 @@
 import Foundation
+import SwiftUI
+
+extension Color {
+    var toRGBA: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)? {
+        let uiColor = UIColor(self)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        if uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            return (red, green, blue, alpha)
+        } else {
+            return nil
+        }
+    }
+}
+
+extension Color {
+    init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
+    }
+}
 
 
 // Function to get the start and end dates of the week for a specified date

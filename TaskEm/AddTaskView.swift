@@ -2,13 +2,14 @@ import SwiftUI
 
 struct AddTaskView: View {
     @State private var title: String = ""
-    @State private var notes: String = ""
     @State private var showIconPicker = false
     @State private var selectedIconName = "star"
     @State private var iconColor = Color.blue
     @State private var dueDate = Date()
     @State private var isTime = false
     @State private var repeatOption: Int = 0
+    @State private var reminderDiffSecs: [Int]? = nil
+    @State private var notes: String = ""
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -24,8 +25,6 @@ struct AddTaskView: View {
             }
             .scrollIndicators(.hidden)
             
-            Spacer()
-            
             SubmitButton(action: submitForm, iconColor: iconColor)
         }
         .padding()
@@ -39,7 +38,7 @@ struct AddTaskView: View {
         print("Notes: \(notes)")
         print("ShowIconPicker: \(showIconPicker)")
         print("SelectediconName: \(selectedIconName)")
-        print("IconColor: \(iconColor)")
+        print("IconColor: \(iconColor.toRGBA!)")
         print("DueDate: \(dueDate)")
         print("isTime: \(isTime)")
         print("repeatOption: \(repeatOption)")
@@ -47,6 +46,8 @@ struct AddTaskView: View {
     
     
 }
+
+
 
 struct TaskTitleSection: View {
     @Binding var title: String
@@ -254,7 +255,7 @@ struct RepeatSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Image(systemName: "text.alignleft")
+                Image(systemName: "repeat")
                     .foregroundColor(iconColor)
                 Text("Repeat:")
                     .font(.title2)
