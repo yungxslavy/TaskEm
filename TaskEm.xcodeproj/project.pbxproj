@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7876D1032C4B6D10008F55F6 /* TestDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7876D1022C4B6D10008F55F6 /* TestDataStore.swift */; };
 		787F53F72C408FA000D64D17 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787F53F62C408FA000D64D17 /* UserData.swift */; };
 		787F53F92C40A04200D64D17 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787F53F82C40A04200D64D17 /* UserStore.swift */; };
 		788030AF2C0D5CD300D5C20E /* TaskEmApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788030AE2C0D5CD300D5C20E /* TaskEmApp.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7876D1022C4B6D10008F55F6 /* TestDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataStore.swift; sourceTree = "<group>"; };
 		787F53F62C408FA000D64D17 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserData.swift; path = TaskEm/UserData.swift; sourceTree = SOURCE_ROOT; };
 		787F53F82C40A04200D64D17 /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserStore.swift; path = TaskEm/UserStore.swift; sourceTree = SOURCE_ROOT; };
 		788030AB2C0D5CD300D5C20E /* TaskEm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskEm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 				7880310A2C274D1300D5C20E /* ToolbarView.swift */,
 				7880310C2C28F3BD00D5C20E /* SettingsPageView.swift */,
 				788031162C2BAB9100D5C20E /* IconPickerView.swift */,
+				7876D1022C4B6D10008F55F6 /* TestDataStore.swift */,
 			);
 			path = TaskEm;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				7880310D2C28F3BD00D5C20E /* SettingsPageView.swift in Sources */,
 				788031132C2B77DD00D5C20E /* AddTaskView.swift in Sources */,
 				788031072C2371C900D5C20E /* TaskModel.swift in Sources */,
+				7876D1032C4B6D10008F55F6 /* TestDataStore.swift in Sources */,
 				788031092C23799000D5C20E /* TaskView.swift in Sources */,
 				787F53F72C408FA000D64D17 /* UserData.swift in Sources */,
 				788030FF2C1AB59E00D5C20E /* UtilityFunctions.swift in Sources */,

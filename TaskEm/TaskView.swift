@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TaskCard: View {
     @Binding var taskData: TaskData
+    var saveFunction: Void
     
     var body: some View {
         HStack(spacing: 10) {
@@ -26,28 +27,32 @@ struct TaskCard: View {
                 .foregroundStyle(taskData.iconColorRGBA.color)
                 .onTapGesture {
                     taskData.isComplete.toggle()
+                    saveFunction
                 }
-            
         }
     }
 }
 
 struct TaskView: View {
-    @State var taskData = TaskData.sampleData
+    @EnvironmentObject var userStore: UserStore
     
     var body: some View {
         VStack {
-            ForEach(taskData.indices, id: \.self) { index in
-                TaskCard(taskData: $taskData[index])
+            ForEach(userStore.userData.tasks.indices, id: \.self) { index in
+                TaskCard(taskData: $userStore.userData.tasks[index],
+                         saveFunction:
+                            {saveData(userStore: userStore)}()
+                )
                     .padding(.vertical)
                     .onTapGesture {
-                        print(index)
+                        userStore.userData.tasks.removeAll{$0.id == userStore.userData.tasks[index].id}
+                        saveData(userStore: userStore)
                     }
                 
                 // Add Divider except after the last item
-                if index != taskData.count - 1 {
+                if index != userStore.userData.tasks.count - 1 {
                     Divider()
-                        .background(Color.white) // Customize the color of the divider
+                        .background(Color.white)
                         .padding(.horizontal)
                 }
             }
@@ -55,8 +60,18 @@ struct TaskView: View {
     }
 }
 
+struct testingTaskView: View {
+    @EnvironmentObject var userStore: UserStore
+    var body: some View {
+        TaskView()
+            .onAppear{
+                loadData(userStore: userStore)
+            }
+    }
+}
 
 
 #Preview{
-    TaskView()
+    testingTaskView()
+        .environmentObject(UserStore())
 }

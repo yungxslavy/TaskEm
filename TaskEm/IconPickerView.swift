@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct IconPickerView: View {
-    @Binding var selectedIcon: String
-    @Binding var iconColor: Color
     @State var viewModel = IconDataModel()
+    @Binding var selectedIcon: String
+
+    let iconColor: Color
     
     var body: some View {
         NavigationStack {
@@ -38,9 +39,9 @@ struct IconPickerView: View {
 
 struct TestIconPicker: View {
     @State private var selectedIcon = "star"
-    @State private var iconColor = Color.red
+    private var iconColor = Color.red
     var body: some View {
-        IconPickerView(selectedIcon: $selectedIcon, iconColor: $iconColor)
+        IconPickerView(selectedIcon: $selectedIcon, iconColor: iconColor)
     }
 }
 

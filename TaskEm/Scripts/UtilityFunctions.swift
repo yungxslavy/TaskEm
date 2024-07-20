@@ -116,8 +116,26 @@ func formattedDate(date: Date) -> String {
     return dateFormatter.string(from: date)
 }
 
-class ReloadViewHelper: ObservableObject {
-    func reloadView() {
-        objectWillChange.send()
+// Saves the data within the user store object
+func saveData(userStore: UserStore) -> Void {
+    Task {
+        do {
+            try await userStore.save()
+        }
+        catch {
+            print("Failed Saving Data: \(error)")
+        }
+    }
+}
+
+// Loads the data from a passed user store 
+func loadData(userStore: UserStore) -> Void {
+    Task{
+        do {
+            try await userStore.load()
+        }
+        catch {
+            print("Failed to load data: \(error)")
+        }
     }
 }

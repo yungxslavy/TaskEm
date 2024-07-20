@@ -1,31 +1,30 @@
 import SwiftUI
 
 struct AddTaskView: View {
-    @State private var title: String = ""
+    @Environment(\.presentationMode) var presentationMode
     @State private var showIconPicker = false
-    @State private var selectedIconName = "star"
-    @State private var iconColor = Color.blue
-    @State private var dueDate = Date()
-    @State private var isTime = false
-    @State private var repeatOption: Int = 0
-    @State private var reminderDiffSecs: [Int]? = nil
-    @State private var notes: String = ""
+    @EnvironmentObject var userStore: UserStore
+    @State private var task = TaskData(
+        title: "",
+        iconName: "star",
+        iconColor: Color.blue
+    )
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             ScrollView {
-                TaskTitleSection(title: $title, showIconPicker: $showIconPicker, selectedIconName: $selectedIconName, iconColor: $iconColor)
-                DueDateSection(dueDate: $dueDate, isTime: $isTime, iconColor: iconColor)
-                ColorSection(iconColor: $iconColor)
-                RepeatSection(repeatOption: $repeatOption, iconColor: iconColor)
-                NotesSection(notes: $notes, iconColor: iconColor)
+                TaskTitleSection(task: $task, showIconPicker: $showIconPicker)
+                DueDateSection(task: $task)
+                ColorSection(task: $task)
+                RepeatSection(task: $task, iconColor: task.iconColorRGBA.color)
+                NotesSection(task: $task, iconColor: task.iconColorRGBA.color)
                     .onTapGesture {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
             }
             .scrollIndicators(.hidden)
             
-            SubmitButton(action: submitForm, iconColor: iconColor)
+            SubmitButton(action: submitForm, iconColor: task.iconColorRGBA.color)
         }
         .padding()
         .navigationTitle("Create Task")
@@ -34,32 +33,31 @@ struct AddTaskView: View {
     func submitForm() {
         // Handle form submission
         print("*********************")
-        print("Title: \(title)")
-        print("Notes: \(notes)")
-        print("ShowIconPicker: \(showIconPicker)")
-        print("SelectediconName: \(selectedIconName)")
-        print("IconColor: \(iconColor.toRGBA!)")
-        print("DueDate: \(dueDate)")
-        print("isTime: \(isTime)")
-        print("repeatOption: \(repeatOption)")
+        print("Title: \(task.title)")
+        print("Notes: \(task.notes)")
+        print("IconName: \(task.iconName)")
+        print("IconColor: \(task.iconColorRGBA)")
+        print("DueDate: \(task.dueDate)")
+        print("isTime: \(task.isTime)")
+        print("repeatOption: \(task.repeatOption)")
+        loadData(userStore: userStore)
+        userStore.userData.tasks.append(task)
+        saveData(userStore: userStore)
+        self.presentationMode.wrappedValue.dismiss()
     }
-    
-    
 }
 
 
 
 struct TaskTitleSection: View {
-    @Binding var title: String
+    @Binding var task: TaskData
     @Binding var showIconPicker: Bool
-    @Binding var selectedIconName: String
-    @Binding var iconColor: Color
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "pencil")
-                    .foregroundColor(iconColor)
+                    .foregroundColor(task.iconColorRGBA.color)
                 Text("Title:")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -67,7 +65,7 @@ struct TaskTitleSection: View {
             }
             
             HStack {
-                TextField("Enter title", text: $title)
+                TextField("Enter title", text: $task.title)
                     .padding(.leading, 4)
                     .padding(.bottom, 8)
                     .overlay(
@@ -82,14 +80,14 @@ struct TaskTitleSection: View {
                 Button(action: {
                     showIconPicker.toggle()
                 }) {
-                    Image(systemName: selectedIconName)
+                    Image(systemName: task.iconName)
                         .frame(width: 45, height: 45)
-                        .foregroundStyle(iconColor)
+                        .foregroundStyle(task.iconColorRGBA.color)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10.0))
                 }
                 .padding(.bottom, 15)
                 .popover(isPresented: $showIconPicker) {
-                    IconPickerView(selectedIcon: $selectedIconName, iconColor: $iconColor)
+                    IconPickerView(selectedIcon: $task.iconName, iconColor: task.iconColorRGBA.color)
                 }
             }
         }
@@ -97,18 +95,16 @@ struct TaskTitleSection: View {
 }
 
 struct DueDateSection: View {
-    @Binding var dueDate: Date
-    @Binding var isTime: Bool
     @State var selectDate = false
     @State var showCalendar = false
-    var iconColor: Color
+    @Binding var task: TaskData
     
     var body: some View {
         // Label section
         VStack(alignment: .center, spacing: 10) {
             HStack {
                 Image(systemName: "calendar")
-                    .foregroundColor(iconColor)
+                    .foregroundColor(task.iconColorRGBA.color)
                 Text("Date:")
                     .font(.title2)
                     .fontWeight(.bold)
@@ -116,12 +112,12 @@ struct DueDateSection: View {
                 Spacer()
                 
                 Image(systemName: "clock")
-                    .foregroundStyle(iconColor)
+                    .foregroundStyle(task.iconColorRGBA.color)
                 Text("Time")
                     .font(.title2)
                     .fontWeight(.bold)
-                Toggle(isOn: $isTime) {}
-                    .toggleStyle(SwitchToggleStyle(tint: iconColor))
+                Toggle(isOn: $task.isTime) {}
+                    .toggleStyle(SwitchToggleStyle(tint: task.iconColorRGBA.color))
                     .scaleEffect(0.8)
                     .frame(width: 35)
                     .padding(.trailing, 15)
@@ -130,7 +126,7 @@ struct DueDateSection: View {
             // Date Display and calendar callup
             VStack {
                 Button(action: {showCalendar.toggle()}){
-                    Text("\(dueDateFormatter(date: dueDate))")
+                    Text("\(dueDateFormatter(date: task.dueDate))")
                         .font(.title2)
                         .fontWeight(.medium)
                         .padding(15)
@@ -140,11 +136,11 @@ struct DueDateSection: View {
                             VStack {
                                 DatePicker(
                                     "Select due date",
-                                    selection: $dueDate,
+                                    selection: $task.dueDate,
                                     displayedComponents: [.date]
                                 )
                                 .datePickerStyle(GraphicalDatePickerStyle())
-                                .tint(iconColor)
+                                .tint(task.iconColorRGBA.color)
                                 .labelsHidden()
                                 
                                 Button(action: {
@@ -155,20 +151,20 @@ struct DueDateSection: View {
                                         .font(.title)
                                 }
                                 .padding(10)
-                                .background(iconColor)
+                                .background(task.iconColorRGBA.color)
                                 .cornerRadius(10)
                             }
                         }
                 }
                 
                 // Time selection display
-                if(isTime) {
+                if(task.isTime) {
                     DatePicker(
                         "Set a time",
-                        selection: $dueDate,
+                        selection: $task.dueDate,
                         displayedComponents: [.hourAndMinute]
                     )
-                    .tint(iconColor)
+                    .tint(task.iconColorRGBA.color)
                     .labelsHidden()
                 }
             }
@@ -184,12 +180,12 @@ struct DueDateSection: View {
 }
 
 struct ColorSection: View {
-    @Binding var iconColor: Color
+    @State private var selectedColorIndex = 0
+    @State private var iconColor = Color.blue
+    @Binding var task: TaskData
+    
     // Define colors for the circles
     let colors: [Color] = [.blue, .red, .green, .yellow]
-    
-    // State variable to track the selected color index
-    @State private var selectedColorIndex = 0
     
     var body: some View {
         VStack {
@@ -233,6 +229,9 @@ struct ColorSection: View {
                     .padding(.vertical, 10)
                     .clipShape(Circle()) // Make the color picker circular
                     .onChange(of: iconColor){
+                        withAnimation {
+                            task.iconColorRGBA = ColorRGBA(color: iconColor)
+                        }
                         if let index = colors.firstIndex(of: iconColor) {
                             selectedColorIndex = index
                         } else {
@@ -248,7 +247,7 @@ struct ColorSection: View {
 }
 
 struct RepeatSection: View {
-    @Binding var repeatOption: Int
+    @Binding var task: TaskData
     var iconColor: Color
     let selectionsText = ["None", "Daily", "Weekly"]
     
@@ -267,7 +266,7 @@ struct RepeatSection: View {
                     ForEach(0..<3){ index in
                         Button(action: {
                             withAnimation{
-                                repeatOption = index
+                                task.repeatOption = index
                             }
                         }){
                             Text(selectionsText[index])
@@ -275,7 +274,7 @@ struct RepeatSection: View {
                                 .font(.title3)
                         }
                         .padding()
-                        .background(repeatOption == index ? iconColor : Color.clear, in: RoundedRectangle(cornerRadius: 10.0))
+                        .background(task.repeatOption == index ? iconColor : Color.clear, in: RoundedRectangle(cornerRadius: 10.0))
                     }
                 }
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
@@ -287,7 +286,7 @@ struct RepeatSection: View {
 }
 
 struct NotesSection: View {
-    @Binding var notes: String
+    @Binding var task: TaskData
     var iconColor: Color
     
     var body: some View {
@@ -302,13 +301,13 @@ struct NotesSection: View {
             }
             
             ZStack {
-                TextEditor(text: $notes)
+                TextEditor(text: $task.notes)
                     .padding(2)
                     .border(Color.gray, width: 2)
                     .frame(height: 200)
                     .cornerRadius(3)
                 
-                if notes.isEmpty {
+                if task.notes.isEmpty {
                     VStack {
                         HStack {
                             Text("Enter notes here...")
@@ -346,6 +345,7 @@ struct AddTaskView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AddTaskView()
+                .environmentObject(UserStore())
         }
     }
 }

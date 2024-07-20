@@ -27,17 +27,17 @@ struct ColorRGBA: Codable {
 
 struct TaskData: Identifiable, Codable {
     let id: UUID
-    var title: String
-    var iconName: String
-    var iconColorRGBA: ColorRGBA
-    var dueDate: Date
-    var isTime: Bool
-    var repeatOption: Int
-    var reminderDiffSecs: [Int]?
-    var notes: String
-    var isComplete: Bool
+    var title: String               // Title of the task
+    var iconName: String            // Icon name as a string
+    var iconColorRGBA: ColorRGBA    // Only way to encode a color ?? fuck you apple 
+    var dueDate: Date               // Date the original task is intended to be completed
+    var isTime: Bool                // Has specified time, else just the day
+    var repeatOption: Int           // 0 = never, 1 = daily, 2 = weekly
+    var reminderDiffSecs: [Int]     // How many different seconds before due date should user be reminded
+    var notes: String               // String for notes provided by the user e
+    var isComplete: Bool            // Boolean that determines completeness of task
     
-    init(id: UUID = UUID(), title: String, iconName: String, iconColor: Color, dueDate: Date = Date(), isTime: Bool = false, repeatOption: Int = 0, reminderDiffSecs: [Int]? = nil, notes: String = "", isComplete: Bool = false) {
+    init(id: UUID = UUID(), title: String, iconName: String, iconColor: Color, dueDate: Date = Date(), isTime: Bool = false, repeatOption: Int = 0, reminderDiffSecs: [Int] = [], notes: String = "", isComplete: Bool = false) {
         self.id = id
         self.title = title
         self.iconName = iconName

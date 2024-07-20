@@ -1,17 +1,13 @@
-//
-//  TaskEmApp.swift
-//  TaskEm
-//
-//  Created by Tomislav Vuckovic on 6/2/24.
-//
-
 import SwiftUI
 
 @main
 struct TaskEmApp: App {
+    @StateObject private var userStore = UserStore()
+    
     var body: some Scene {
         WindowGroup {
             HomeView(selectedDate: Date(), baseDate: Date())
+                .environmentObject(userStore)
         }
     }
 }

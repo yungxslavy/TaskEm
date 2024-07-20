@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @State var selectedDate: Date
     @State var baseDate: Date
+    @EnvironmentObject var userStore: UserStore
     
     var body: some View {
         NavigationStack{
@@ -24,6 +25,9 @@ struct HomeView: View {
                 // Task View
                 ScrollView {
                     TaskView()
+                        .onAppear{
+                            loadData(userStore: userStore)
+                        }
                 }
                 .scrollIndicators(.hidden)
                 Spacer()
@@ -35,4 +39,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView(selectedDate: Date(), baseDate: Date())
+        .environmentObject(UserStore())
 }
